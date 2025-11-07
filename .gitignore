@@ -1,0 +1,74 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.pdb
+
+# --- Entorno virtual ---
+venv/
+.env/
+.venv/
+env/
+ENV/
+
+# --- Datos y modelos ---
+data/
+datasets/
+*.csv
+*.tsv
+*.json
+*.xml
+*.xlsx
+*.xls
+*.zip
+*.tar
+*.gz
+*.npz
+*.npy
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.joblib
+*.pkl
+checkpoints/
+models/
+outputs/
+runs/
+logs/
+wandb/
+
+# --- Archivos temporales / caché ---
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# --- IDEs y editores ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- Resultados / predicciones ---
+results/
+predictions/
+inference/
+output_images/
+plots/
+figures/
+
+# --- Librerías descargadas ---
+__pycache__/
+*.egg-info/
+build/
+dist/
+
+# --- Configuración local ---
+config/local.json
+config/secrets.json
