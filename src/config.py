@@ -2,7 +2,7 @@
 import torch
 
 CONFIG = {
-    "data_dir": "./data",         # ruta a tus imágenes
+    "data_dir": "./data", 
     "batch_size": 16,
     "img_size": 224,
     "epochs": 25,

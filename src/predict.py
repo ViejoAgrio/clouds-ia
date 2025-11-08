@@ -8,7 +8,7 @@ import json
 
 # ======== CONFIGURACIÓN ========
 MODEL_PATH = "models/vit_cloud_20251105_111601.pth"  # tu modelo entrenado
-IMAGE_PATH = "D:/Tec/Septimo/Sub_periodo_2/Proyecto_Benji/data/test/clear sky/clearsky1.jpg"                 # imagen a clasificar
+IMAGE_PATH = "D:/Tec/Septimo/Sub_periodo_2/Proyecto_Benji/data/test/anime-sky-background-vczc6repqb8q6ue4.jpg"                 # imagen a clasificar
 LABELS_PATH = "data/labels.json"                     # nombres de categorías (opcional)
 MODEL_NAME = "google/vit-base-patch16-224"           # el mismo usado en entrenamiento
 # =================================
