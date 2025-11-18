@@ -16,6 +16,7 @@ ENV/
 # --- Datos y modelos ---
 data/
 datasets/
+original_data/
 *.csv
 *.tsv
 *.json

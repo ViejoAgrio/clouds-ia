@@ -1,6 +1,8 @@
 # src/dataset.py
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
+from collections import Counter
+import torch
 
 def get_data_loaders(data_dir, batch_size=16, img_size=224):
     """
@@ -45,7 +47,16 @@ def get_data_loaders(data_dir, batch_size=16, img_size=224):
     train_dataset = datasets.ImageFolder(root=f"{data_dir}/train", transform=train_transforms)
     val_dataset   = datasets.ImageFolder(root=f"{data_dir}/val", transform=val_transforms)
 
+    # 🔹 Calcular frecuencias de clase
+    class_counts = Counter(train_dataset.targets)
+    num_samples = len(train_dataset)
+    num_classes = len(class_counts)
+
+    # 🔹 Calcular pesos inversos por clase
+    class_weights = [num_samples / (num_classes * class_counts[i]) for i in range(num_classes)]
+    class_weights = torch.tensor(class_weights, dtype=torch.float)
+
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
     val_loader   = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
 
-    return train_loader, val_loader, train_dataset.classes
+    return train_loader, val_loader, train_dataset.classes, class_weights

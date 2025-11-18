@@ -9,9 +9,10 @@ from src.dataset import get_data_loaders
 from src.model import create_vit_model
 from src.train import train_one_epoch, validate
 from src.config import CONFIG
+from src.losses import LabelSmoothingCrossEntropy
 
 
-def log_training_results(cfg, train_loss, train_acc, val_loss, val_acc, val_f1):
+def log_training_results(cfg, train_loss, train_acc, val_loss, val_acc, val_f1, smoothing = 0.0):
     """
     Registra los resultados del entrenamiento en logs/training_log.csv.
     """
@@ -25,7 +26,8 @@ def log_training_results(cfg, train_loss, train_acc, val_loss, val_acc, val_f1):
             # Encabezado
             writer.writerow([
                 "timestamp", "model_name", "epochs", "batch_size", "lr",
-                "img_size", "train_loss", "train_acc", "val_loss", "val_acc", "val_f1"
+                "img_size", "train_loss", "train_acc", "val_loss", "val_acc", "val_f1",
+                "smoothing"
             ])
         # Fila de resultados
         writer.writerow([
@@ -39,7 +41,8 @@ def log_training_results(cfg, train_loss, train_acc, val_loss, val_acc, val_f1):
             f"{train_acc:.4f}",
             f"{val_loss:.4f}",
             f"{val_acc:.4f}",
-            f"{val_f1:.4f}"
+            f"{val_f1:.4f}",
+            f"{smoothing:.4f}"
         ])
 
 
@@ -48,7 +51,7 @@ def main():
     device = cfg["device"]
 
     # 1️⃣ Cargar datos
-    train_loader, val_loader, class_names = get_data_loaders(
+    train_loader, val_loader, class_names, class_weights = get_data_loaders(
         cfg["data_dir"], cfg["batch_size"], cfg["img_size"]
     )
     print(f"📂 Clases detectadas: {class_names}")
@@ -58,7 +61,9 @@ def main():
     model.to(device)
 
     # 3️⃣ Pérdida y optimizador
-    criterion = nn.CrossEntropyLoss()
+    smoothing = 0.2
+    criterion = LabelSmoothingCrossEntropy(smoothing=smoothing, class_weights=class_weights.to(device))
+    # criterion = nn.CrossEntropyLoss(weight=class_weights.to(device))
     optimizer = optim.AdamW(model.parameters(), lr=cfg["learning_rate"])
 
     # 4️⃣ Entrenamiento principal
@@ -80,7 +85,7 @@ def main():
     print(f"✅ Modelo guardado en: {model_path}")
 
     # 6️⃣ Guardar resumen
-    log_training_results(cfg, train_loss, train_acc, val_loss, val_acc, val_f1)
+    log_training_results(cfg, train_loss, train_acc, val_loss, val_acc, val_f1, smoothing)
     print("📝 Registro añadido a logs/training_log.csv")
 
 
